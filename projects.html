@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | Dhanush K</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace&family=Notable&family=Offside&family=Poppins:wght@300;400;500;600;700&family=Roboto+Slab:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        :root {
+            --bg-primary: #0A0F0D;
+            --bg-secondary: #2D4F4A;
+            --bg-gradient-start: #1c2c28;
+            --accent: #8DB1A4;
+            --text-primary: #F5F3EC;
+            --text-secondary: #D2CDB9;
+            --glass-bg: rgba(45, 79, 74, 0.25);
+            --glass-border: rgba(141, 177, 164, 0.2);
+            --glass-highlight: rgba(141, 177, 164, 0.3);
+            --glass-shadow: rgba(0, 0, 0, 0.3);
+            --particle-color: var(--accent);
+            --nav-bg: rgba(10, 15, 13, 0.8);
+        }
+
+        body[data-theme="light"] {
+            --bg-primary: #F5F3EC;
+            --bg-secondary: #D2CDB9;
+            --bg-gradient-start: #e8e6e0;
+            --accent: #92A378;
+            --text-primary: #0A0F0D;
+            --text-secondary: #2D4F4A;
+            --glass-bg: rgba(210, 205, 185, 0.35);
+            --glass-border: rgba(146, 163, 120, 0.4);
+            --glass-highlight: rgba(146, 163, 120, 0.5);
+            --glass-shadow: rgba(90, 90, 90, 0.15);
+            --particle-color: var(--text-secondary);
+            --nav-bg: rgba(245, 243, 236, 0.8);
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            background-image: radial-gradient(ellipse at center, var(--bg-gradient-start) 0%, var(--bg-primary) 70%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+            padding: 20px;
+            transition: background 0.4s, color 0.4s;
+        }
+
+        #interactive-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            transition: transform 0.1s linear;
+            transform-style: preserve-3d;
+        }
+
+        .particle-3d {
+            position: absolute;
+            background: var(--particle-color);
+            border-radius: 50%;
+            pointer-events: none;
+            transition: background 0.4s;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            border: 0.5px solid var(--glass-border);
+            border-radius: 30px;
+            box-shadow: 0 12px 40px var(--glass-shadow), inset 0 0 0 1px var(--glass-highlight);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.4s, border 0.4s;
+        }
+
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--nav-bg);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .logo {
+            font-family: 'Bruno Ace', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-family: 'Offside', sans-serif;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            padding: 5px 10px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent));
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after, .nav-links a.active::after {
+            width: 100%;
+        }
+
+        #theme-switcher {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px var(--glass-shadow);
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        #theme-switcher:hover {
+            background: var(--glass-highlight);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 2rem;
+            height: 2rem;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            z-index: 1001;
+        }
+        
+        .hamburger .bar {
+            width: 2rem;
+            height: 0.25rem;
+            background: var(--text-primary);
+            border-radius: 10px;
+            transition: all 0.3s linear;
+            transform-origin: 1px;
+        }
+
+        .hamburger.active .bar:nth-child(1) { transform: rotate(45deg); }
+        .hamburger.active .bar:nth-child(2) { opacity: 0; transform: translateX(20px); }
+        .hamburger.active .bar:nth-child(3) { transform: rotate(-45deg); }
+
+        .page-header {
+            margin-top: 120px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .page-title {
+            font-family: 'Notable', sans-serif;
+            font-size: 48px;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--accent) 30%, var(--text-primary) 70%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Project Sections */
+        .project-section {
+            min-height: 100vh;
+            padding: 80px 10%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .project-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .project-container.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .project-image-wrapper {
+            flex: 1;
+            position: relative;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px var(--glass-shadow);
+        }
+
+        .project-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .project-image-wrapper:hover .project-image {
+            transform: scale(1.05);
+        }
+
+        .project-content {
+            flex: 1;
+        }
+
+        .project-number {
+            font-family: 'Bruno Ace', sans-serif;
+            font-size: 14px;
+            color: var(--accent);
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .project-name {
+            font-family: 'Roboto Slab', serif;
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .project-tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .tech-item {
+            background: var(--glass-bg);
+            border: 0.5px solid var(--glass-border);
+            color: var(--accent);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .project-features {
+            list-style: none;
+            margin-bottom: 40px;
+        }
+
+        .project-features li {
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+        }
+
+        .project-features li i {
+            color: var(--accent);
+            font-size: 14px;
+        }
+
+        .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--accent);
+            color: var(--bg-primary);
+            padding: 14px 32px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid transparent;
+        }
+
+        .github-link:hover {
+            background: transparent;
+            color: var(--accent);
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            gap: 16px;
+        }
+
+        .github-link i {
+            font-size: 20px;
+        }
+
+        .section-divider {
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+            margin: 40px auto;
+        }
+
+        footer {
+            padding: 60px 10%;
+            text-align: center;
+            position: relative;
+            margin-top: 40px;
+        }
+
+        .footer-text { 
+            color: var(--text-secondary); 
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .social-links-footer {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .social-links-footer a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            font-size: 20px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .social-links-footer a:hover {
+            background: var(--accent);
+            color: var(--bg-primary);
+            transform: translateY(-5px) scale(1.1);
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s;
+            z-index: 1000;
+            box-shadow: 0 5px 15px var(--glass-shadow);
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-to-top.show { 
+            opacity: 1; 
+            transform: translateY(0); 
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            background: var(--text-primary);
+            color: var(--accent);
+        }
+
+        @media (max-width: 1024px) {
+            .project-container, .project-container.reverse {
+                flex-direction: column;
+                gap: 50px;
+            }
+
+            .project-name {
+                font-size: 36px;
+            }
+
+            .project-section {
+                padding: 60px 5%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-container { padding: 15px; }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 100%;
+                height: 100vh;
+                background: var(--nav-bg);
+                backdrop-filter: blur(10px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 40px;
+                transition: right 0.3s ease-in-out;
+            }
+            
+            .nav-links.active { right: 0; }
+            .nav-links a { font-size: 1.2rem; }
+            #theme-switcher { position: absolute; bottom: 20px; }
+            .hamburger { display: flex; }
+
+            .page-title {
+                font-size: 36px;
+            }
+
+            .project-name {
+                font-size: 28px;
+            }
+
+            .project-description {
+                font-size: 16px;
+            }
+
+            .project-section {
+                min-height: auto;
+                padding: 40px 5%;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="interactive-background"></div>
+
+    <nav class="nav-container">
+        <div class="logo">DHANUSH</div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="index.html#education">Education</a>
+            <a href="index.html#skills">Skills</a>
+            <a href="index.html#experience">Experience</a>
+            <a href="projects.html" class="active">Projects</a>
+            <a href="index.html#achievements">Achievements</a>
+            <button id="theme-switcher" aria-label="Toggle theme">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+        <button class="hamburger" aria-label="Toggle navigation menu">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </button>
+    </nav>
+
+    <div class="page-header">
+        <h1 class="page-title">PROJECTS</h1>
+        <p class="page-subtitle">A collection of my work in AI, IoT, and software development</p>
+    </div>
+
+    <!-- Project 1 -->
+    <section class="project-section" id="project-1">
+        <div class="project-container">
+            <div class="project-image-wrapper glass-panel">
+                <img src="Movie Genre Prediction.jpeg" alt="Movie Genre Prediction" class="project-image">
+            </div>
+            <div class="project-content">
+                <div class="project-number">01</div>
+                <h2 class="project-name">Movie Genre Prediction using Posters</h2>
+                <div class="project-tech-stack">
+                    <span class="tech-item">TensorFlow</span>
+                    <span class="tech-item">Keras</span>
+                    <span class="tech-item">Pandas</span>
+                    <span class="tech-item">Matplotlib</span>
+                    <span class="tech-item">CNN</span>
+                </div>
+                <p class="project-description">
+                    A deep learning model that predicts movie genres solely from poster images. Using convolutional neural networks, the system analyzes visual patterns, color schemes, and composition elements to classify movies into genres like Action, Drama, Comedy, Horror, and more.
+                </p>
+                <ul class="project-features">
+                    <li><i class="fas fa-check-circle"></i> Achieved 85% accuracy on a test set of 10,000 movie posters</li>
+                    <li><i class="fas fa-check-circle"></i> Implemented data augmentation to handle limited training data</li>
+                    <li><i class="fas fa-check-circle"></i> Created visualization tools to explain model predictions</li>
+                </ul>
+                <a href="https://github.com/dhanushkaruppan/movie-genre-prediction" class="github-link">
+                    <i class="fab fa-github"></i>
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Project 2 -->
+    <section class="project-section" id="project-2">
+        <div class="project-container reverse">
+            <div class="project-image-wrapper glass-panel">
+                <img src="Agriculture Drone Monitoring.jpeg" alt="Agriculture Drone Monitoring" class="project-image">
+            </div>
+            <div class="project-content">
+                <div class="project-number">02</div>
+                <h2 class="project-name">Agriculture Drone Monitoring System</h2>
+                <div class="project-tech-stack">
+                    <span class="tech-item">IoT</span>
+                    <span class="tech-item">Raspberry Pi</span>
+                    <span class="tech-item">CNN</span>
+                    <span class="tech-item">OpenCV</span>
+                    <span class="tech-item">Python</span>
+                </div>
+                <p class="project-description">
+                    An AI-powered drone system designed to assist farmers in monitoring crop health, detecting pests and diseases early, and optimizing resource usage. The drone captures high-resolution images and processes them in real-time to provide actionable insights.
+                </p>
+                <ul class="project-features">
+                    <li><i class="fas fa-check-circle"></i> Real-time crop health analysis using multispectral imaging</li>
+                    <li><i class="fas fa-check-circle"></i> Automated pest detection with 90% accuracy</li>
+                    <li><i class="fas fa-check-circle"></i> Reduces manual inspection time by 60%</li>
+                </ul>
+                <a href="https://github.com/dhanushkaruppan/agriculture-drone-monitoring" class="github-link">
+                    <i class="fab fa-github"></i>
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Project 3 -->
+    <section class="project-section" id="project-3">
+        <div class="project-container">
+            <div class="project-image-wrapper glass-panel">
+                <img src="LinkedIn Post Generator.jpeg" alt="LinkedIn Post Generator" class="project-image">
+            </div>
+            <div class="project-content">
+                <div class="project-number">03</div>
+                <h2 class="project-name">LinkedIn Post Generator</h2>
+                <div class="project-tech-stack">
+                    <span class="tech-item">Dart</span>
+                    <span class="tech-item">Flutter</span>
+                    <span class="tech-item">GitHub API</span>
+                    <span class="tech-item">Hugging Face</span>
+                    <span class="tech-item">AI/ML</span>
+                </div>
+                <p class="project-description">
+                    A smart tool that automatically generates professional LinkedIn posts from GitHub repository content. It analyzes commit messages, README files, and code structure to create engaging summaries perfect for sharing development progress with your network.
+                </p>
+                <ul class="project-features">
+                    <li><i class="fas fa-check-circle"></i> Supports multiple post tones: technical, casual, and announcement</li>
+                    <li><i class="fas fa-check-circle"></i> Integrates with GitHub API for real-time repository analysis</li>
+                    <li><i class="fas fa-check-circle"></i> Customizable templates for different types of updates</li>
+                </ul>
+                <a href="https://github.com/dhanushkaruppan/linkedin-post-generator" class="github-link">
+                    <i class="fab fa-github"></i>
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Project 4 -->
+    <section class="project-section" id="project-4">
+        <div class="project-container reverse">
+            <div class="project-image-wrapper glass-panel">
+                <img src="Smart Helmet.jpeg" alt="Smart Helmet" class="project-image">
+            </div>
+            <div class="project-content">
+                <div class="project-number">04</div>
+                <h2 class="project-name">Smart Helmet for Accident Detection</h2>
+                <div class="project-tech-stack">
+                    <span class="tech-item">Raspberry Pi</span>
+                    <span class="tech-item">Arduino</span>
+                    <span class="tech-item">SW-420</span>
+                    <span class="tech-item">GPS</span>
+                    <span class="tech-item">GSM</span>
+                </div>
+                <p class="project-description">
+                    An IoT-enabled safety helmet that detects accidents in real-time and automatically alerts emergency contacts. The system combines impact sensors, GPS tracking, and cellular connectivity to provide immediate assistance when it matters most.
+                </p>
+                <ul class="project-features">
+                    <li><i class="fas fa-check-circle"></i> Instant accident detection with vibration and impact sensors</li>
+                    <li><i class="fas fa-check-circle"></i> Automatic SMS alerts with GPS coordinates to emergency contacts</li>
+                    <li><i class="fas fa-check-circle"></i> Real-time video logging for accident evidence</li>
+                </ul>
+                <a href="https://github.com/dhanushkaruppan/smart-helmet" class="github-link">
+                    <i class="fab fa-github"></i>
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="glass-panel">
+        <p class="footer-text">© 2026 Dhanush K. All Rights Reserved.</p>
+        <div class="social-links-footer">
+            <a href="https://www.linkedin.com/in/kd-dhanush-b9664a26b" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="https://github.com/dhanushkaruppan" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="mailto:kddhanush851@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+            <a href="https://www.instagram.com/kd_the_sassy_gent/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
+
+    <a href="#" class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // 3D Background
+            const interactiveBg = document.getElementById('interactive-background');
+            if (interactiveBg) {
+                for (let i = 0; i < 100; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle-3d');
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    const size = Math.random() * 2.5 + 1;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.transform = `translateZ(${(Math.random() - 0.5) * 500}px)`;
+                    particle.style.opacity = `${Math.random() * 0.6 + 0.2}`;
+                    interactiveBg.appendChild(particle);
+                }
+
+                if (!prefersReducedMotion) {
+                    window.addEventListener('mousemove', (e) => {
+                        const { clientX, clientY } = e;
+                        const { innerWidth, innerHeight } = window;
+                        const yRotation = ((clientX - innerWidth / 2) / innerWidth) * 8;
+                        const xRotation = ((clientY - innerHeight / 2) / innerHeight) * -8;
+                        interactiveBg.style.transform = `perspective(1200px) rotateX(${xRotation}deg) rotateY(${yRotation}deg) translateZ(-150px)`;
+                    });
+                }
+            }
+
+            // Theme switcher
+            const themeSwitcher = document.getElementById('theme-switcher');
+            const setIconForTheme = (theme) => {
+                const icon = themeSwitcher?.querySelector('i');
+                if (icon) icon.className = theme === 'light' ? 'fas fa-sun' : 'fas fa-moon';
+            };
+            const applyTheme = (theme) => {
+                body.dataset.theme = theme;
+                localStorage.setItem('theme', theme);
+                setIconForTheme(theme);
+            };
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'));
+
+            themeSwitcher?.addEventListener('click', () => {
+                const newTheme = body.dataset.theme === 'dark' ? 'light' : 'dark';
+                applyTheme(newTheme);
+            });
+
+            // Hamburger menu
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            hamburger?.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navLinks?.classList.toggle('active');
+                body.classList.toggle('no-scroll');
+            });
+            navLinks?.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger?.classList.remove('active');
+                    navLinks?.classList.remove('active');
+                    body.classList.remove('no-scroll');
+                });
+            });
+
+            // Back to top button
+            const backToTop = document.querySelector('.back-to-top');
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTop?.classList.add('show');
+                } else {
+                    backToTop?.classList.remove('show');
+                }
+            });
+
+            // Smooth scroll for back to top
+            backToTop?.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Intersection Observer for fade-in animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.project-container').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
